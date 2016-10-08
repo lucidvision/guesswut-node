@@ -1,7 +1,15 @@
+var express = require('express')
+var app = express()
 var firebase = require('firebase')
 var request = require('request')
 
 var API_KEY = 'AIzaSyBJkzp8E5ER-6GYnRKCz0JSdxf1jqUL2ac'
+
+app.set('port', (process.env.PORT || 5000))
+
+app.listen(app.get('port'), function() {
+  console.log('Node app is running on port', app.get('port'))
+})
 
 firebase.initializeApp({
   serviceAccount: require('./credentials/serviceAccountCredentials.json'),
