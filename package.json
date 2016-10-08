@@ -1,0 +1,21 @@
+{
+  "name": "guesswut-node",
+  "version": "1.0.0",
+  "author": "Brian Park",
+  "description": "Server for GuessWut react-native client",
+  "main": "app.js",
+  "engines": {
+    "node": "~4.2"
+  },
+  "scripts": {
+    "start": "node server.js",
+    "deploy": "gcloud app deploy"
+  },
+  "author": "Brian Park",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.14.0",
+    "firebase": "^3.4.1",
+    "request": "^2.75.0"
+  }
+}
