@@ -13,7 +13,6 @@ app.get('/', function (req, res) {
 })
 
 app.post('/sendNotification', function (req, res) {
-  const { tokens, title, body } = req.body
   request({
     url: 'https://fcm.googleapis.com/fcm/send',
     method: 'POST',
@@ -22,10 +21,10 @@ app.post('/sendNotification', function (req, res) {
       'Authorization': 'key=' + API_KEY
     },
     body: JSON.stringify({
-      registration_ids: tokens,
+      registration_ids: req.body.tokens,
       notification: {
-        title,
-        body
+        title: req.body.title,
+        body: req.body.body
       }
     })
   }, function (error, response, body) {
