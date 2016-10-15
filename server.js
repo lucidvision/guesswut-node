@@ -5,6 +5,8 @@ var app = express()
 
 var API_KEY = 'AIzaSyBJkzp8E5ER-6GYnRKCz0JSdxf1jqUL2ac'
 
+var port = process.env.PORT || 3000
+
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: true }))
 
@@ -41,6 +43,6 @@ app.post('/sendNotification', function (req, res) {
   })
 })
 
-app.listen(3000, function () {
-  console.log('Magic happens on port 3000')
+app.listen(port, function () {
+  console.log('Magic happens on port ' + port)
 })
