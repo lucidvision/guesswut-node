@@ -1,40 +1,19 @@
 var express = require('express')
-var app = express()
-var firebase = require('firebase')
+var bodyParser = require('body-parser')
 var request = require('request')
+var app = express()
 
 var API_KEY = 'AIzaSyBJkzp8E5ER-6GYnRKCz0JSdxf1jqUL2ac'
 
-app.set('port', (process.env.PORT || 5000))
+app.use(bodyParser.json())
+app.use(bodyParser.urlencoded({ extended: true }))
 
-app.listen(app.get('port'), function() {
-  console.log('Node app is running on port', app.get('port'))
+app.get('/', function (req, res) {
+  res.json({ message: 'hooray! welcome to our api!' })
 })
 
-firebase.initializeApp({
-  serviceAccount: require('./credentials/serviceAccountCredentials.json'),
-  databaseURL: 'https://guesswut-324e8.firebaseio.com'
-})
-
-var ref = firebase.database().ref()
-
-function listenForNotificationRequests () {
-  var requests = ref.child('notificationRequests')
-  requests.on('child_added', function (requestSnapshot) {
-    var request = requestSnapshot.val()
-    sendNotificationToUser(
-      request.token,
-      request.message,
-      function () {
-        request.ref().remove()
-      }
-    )
-  }, function (error) {
-    console.error(error)
-  })
-}
-
-function sendNotificationToUser (token, message, onSuccess) {
+app.post('/sendNotification', function (req, res) {
+  const { tokens, title, body } = req.body
   request({
     url: 'https://fcm.googleapis.com/fcm/send',
     method: 'POST',
@@ -43,20 +22,26 @@ function sendNotificationToUser (token, message, onSuccess) {
       'Authorization': 'key=' + API_KEY
     },
     body: JSON.stringify({
+      registration_ids: tokens,
       notification: {
-        title: message
-      },
-      to: token
+        title,
+        body
+      }
     })
   }, function (error, response, body) {
     if (error) {
-      console.error(error)
+      console.error('Error')
+      res.json({ message: error })
     } else if (response.statusCode >= 400) {
-      console.error('HTTP Error: ' + response.statusCode + ' - ' + response.statusMessage)
+      console.error('Error')
+      res.json({ message: `Error: + ${response.statusCode} - ${response.statusMessage}` })
     } else {
-      onSuccess()
+      console.log('success')
+      res.json({ message: 'Notifications sent!' })
     }
   })
-}
+})
 
-listenForNotificationRequests()
+app.listen(3000, function () {
+  console.log('Magic happens on port 3000')
+})
