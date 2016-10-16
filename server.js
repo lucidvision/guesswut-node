@@ -23,6 +23,7 @@ app.post('/sendNotification', function (req, res) {
       'Authorization': 'key=' + API_KEY
     },
     body: JSON.stringify({
+      priority: 'high',
       registration_ids: req.body.tokens,
       notification: {
         title: req.body.title,
