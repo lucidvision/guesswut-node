@@ -26,7 +26,9 @@ app.post('/sendNotification', function (req, res) {
       registration_ids: req.body.tokens,
       notification: {
         title: req.body.title,
-        body: req.body.body
+        body: req.body.body,
+        sound: true,
+        vibrate: true
       }
     })
   }, function (error, response, body) {
